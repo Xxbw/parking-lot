@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xbw.dao.UserMapper">
+
+    <select id="getAdminUser" resultType="user" parameterType="string">
+		SELECT * FROM pro_admin WHERE userName = #{userName} and password = #{password}
+	</select>
+
+	<select id="getAdminUserByName" resultType="user" parameterType="string">
+		SELECT * FROM pro_admin WHERE userName = #{userName}
+	</select>
+
+	<insert id="insertAdminUser" parameterType="user">
+		INSERT INTO pro_admin
+		(userName,password,phone,email)
+		VALUES(#{userName},#{password},#{phone},#{email})
+	</insert>
+
+	<update id="updateAdminUser" parameterType="user">
+		UPDATE pro_admin SET userName=#{userName},password=#{password} WHERE id=#{id}
+	</update>
+
+	<update id="updatePwdById">
+		UPDATE pro_admin SET password=#{password} WHERE id=#{id}
+	</update>
+</mapper>

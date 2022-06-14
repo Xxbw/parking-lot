@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xbw.dao.ParkedVehiclesMapper">
+
+	<resultMap id="vehicles" type="parkedVehicles">
+		<id column="id" property="id"/>
+		<result column="car_id" property="carId"/>
+		<result column="entry_time" property="entryTime"/>
+		<result column="parking_state" property="parkingState" />
+		<result column="photo" property="photo"/>
+		<association property="carInfor" javaType="CarInfor">
+			<id column="id" property="id" />
+			<result column="car_number" property="carNumber"/>
+			<result column="state" property="state"/>
+			<result column="priceMode" property="priceMode"/>
+			<result column="situation" property="situation"/>
+			<result column="recordCount" property="recordCount"/>
+			<result column="allPrice" property="allPrice"/>
+		</association>
+	</resultMap>
+
+	<select id="getParkedVehicles" resultMap="vehicles">
+		SELECT * FROM pro_parked_vehicles v,pro_car_information i
+		<trim prefix="where" prefixOverrides="and | or">
+			v.car_id = i.id
+			<if test="carNumber != null and carNumber != ''">
+				and i.car_number like CONCAT ('%',#{carNumber},'%')
+			</if>
+		</trim>
+		order by entry_time DESC
+	</select>
+
+	<select id="getParkedVehicleByState" resultMap="vehicles">
+		SELECT * FROM pro_parked_vehicles v,pro_car_information i where v.car_id = i.id and v.parking_state = 1
+	</select>
+
+	<insert id="insterVehicle" parameterType="parkedVehicles">
+		INSERT INTO pro_parked_vehicles
+		(car_id,entry_time,parking_state,photo)
+		VALUES(#{carId},#{entryTime},#{parkingState},#{photo})
+	</insert>
+
+	<select id="getParkedVehiclesCount" resultType="Int">
+		SELECT COUNT(1) FROM pro_parked_vehicles v,pro_car_information i
+		<trim prefix="where" prefixOverrides="and | or">
+			v.car_id = i.id
+			<if test="carNumber != null and carNumber != ''">
+				AND i.car_number LIKE CONCAT ('%',#{carNumber},'%')
+			</if>
+		</trim>
+	</select>
+
+	<update id="updateVehicle" parameterType="parkedVehicles">
+		UPDATE pro_parked_vehicles SET
+		car_number=#{carNumber},entry_time=#{entryTime},parking_state=#{parkingState}
+		WHERE id=#{id}
+	</update>
+
+	<delete id="deleteParkedVehicleById">
+		DELETE FROM `pro_parked_vehicles` WHERE id = #{id}
+	</delete>
+
+	<select id="getParkedVehicleById" resultType="parkedVehicles">
+		SELECT * FROM pro_parked_vehicles
+		WHERE id = #{id}
+	</select>
+
+	<select id="getParkedVehicleByCarId" resultType="Int">
+		SELECT count(*) FROM pro_parked_vehicles where car_id = #{carId}
+	</select>
+
+
+</mapper>

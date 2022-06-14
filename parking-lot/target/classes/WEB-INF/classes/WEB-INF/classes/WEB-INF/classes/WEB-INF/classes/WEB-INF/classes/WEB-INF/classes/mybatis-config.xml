@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<settings>
+		<setting name="lazyLoadingEnabled" value="false" />
+	</settings>
+
+
+	<typeAliases>
+		<package name="xbw.pojo" />
+	</typeAliases>
+
+	<plugins>
+		<!-- com.github.pagehelper为PageHelper类所在包名 -->
+		<plugin interceptor="com.github.pagehelper.PageInterceptor">
+			<!-- 使用MySQL方言的分页 -->
+			<property name="helperDialect" value="mysql"/>
+			<property name="pageSizeZero" value="true"/>
+		</plugin>
+	</plugins>
+
+
+</configuration>

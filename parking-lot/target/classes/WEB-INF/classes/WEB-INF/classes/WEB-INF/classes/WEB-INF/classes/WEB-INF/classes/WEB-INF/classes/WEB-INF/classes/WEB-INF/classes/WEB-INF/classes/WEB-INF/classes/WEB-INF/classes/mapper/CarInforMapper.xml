@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xbw.dao.CarInforMapper">
+
+    <resultMap id="baseCarInfo" type="CarInfor">
+        <!--id 一定要对应上，每个resultmap下都要有一个id-->
+        <id column="id" property="id"/>
+        <result column="car_number" property="carNumber"/>
+        <result column="state" property="state"/>
+        <result column="priceMode" property="priceMode"/>
+        <result column="situation" property="situation"/>
+        <result column="recordCount" property="recordCount"/>
+        <result column="allPrice" property="allPrice"/>
+    </resultMap>
+
+    <select id="getCarInfor" resultMap="baseCarInfo">
+        SELECT * FROM pro_car_information c LEFT JOIN (SELECT car_id , COUNT(*) AS recordCount, SUM(price) AS allPrice
+        FROM pro_parking_record WHERE record_situation = 0 GROUP BY car_id) t
+        ON c.id=t.car_id
+        <trim prefix="where" prefixOverrides="and | or">
+            situation = 0
+            <if test="carNumber != null and carNumber != ''">
+                and car_number like CONCAT ('%',#{carNumber},'%')
+            </if>
+            <if test="priceMode != null and priceMode != ''" >
+                and priceMode = #{priceMode}
+            </if>
+        </trim>
+        order by id ASC
+    </select>
+
+    <select id="getCarInforById" parameterType="int" resultType="carInfor">
+		SELECT * FROM pro_car_information where id = #{id}
+	</select>
+
+    <insert id="insertCarInfor" parameterType="carInfor">
+		INSERT INTO pro_car_information (id,car_number,state,priceMode,situation)
+		 VALUES (#{id},#{carNumber},#{state},#{priceMode},0);
+	</insert>
+    
+    <update id="updateCarInfor" parameterType="carInfor">
+        UPDATE pro_car_information SET
+        car_number=#{carNumber},state=#{state},priceMode=#{priceMode}
+		WHERE id=#{id}
+    </update>
+
+    <update id="deleteCarInforByid" parameterType="int">
+        UPDATE pro_car_information SET situation = 1
+        WHERE id=#{id}
+    </update>
+
+    <select id="getCarInforCount" resultType="Int">
+        SELECT count(1) FROM pro_car_information
+        <trim prefix="WHERE" prefixOverrides="and | or">
+            situation = 0
+            <if test="carNumber != null and carNumber != ''">
+                and car_number like CONCAT ('%',#{carNumber},'%')
+            </if>
+            <if test="priceMode != null and priceMode != ''" >
+                and priceMode = #{priceMode}
+            </if>
+        </trim>
+    </select>
+    
+    <select id="getModes" resultType="PriceMode">
+        SELECT * FROM pro_mode
+    </select>
+
+    <select id="getCarNumbers" resultMap="baseCarInfo">
+        SELECT id, car_number FROM pro_car_information
+    </select>
+
+</mapper>

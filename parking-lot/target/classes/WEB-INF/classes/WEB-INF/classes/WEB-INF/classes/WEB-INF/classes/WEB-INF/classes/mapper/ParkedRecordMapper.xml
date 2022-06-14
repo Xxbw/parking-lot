@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xbw.dao.ParkedRecordMapper">
+
+    <resultMap id="baseParkingRecord" type="parkingRecord">
+        <!--id 一定要对应上，每个resultmap下都要有一个id-->
+        <id column="id" property="id"/>
+        <result column="car_id" property="carId"/>
+        <result column="entry_time" property="entryTime"/>
+        <result column="departure_time" property="departureTime"/>
+        <result column="price" property="price" />
+        <association property="carInfor" javaType="CarInfor">
+            <id column="id" property="id" />
+            <result column="car_number" property="carNumber"/>
+            <result column="state" property="state"/>
+            <result column="priceMode" property="priceMode"/>
+            <result column="situation" property="situation"/>
+            <result column="recordCount" property="recordCount"/>
+            <result column="allPrice" property="allPrice"/>
+        </association>
+    </resultMap>
+
+    <select id="getParkingRecord" resultMap="baseParkingRecord">
+          SELECT * FROM pro_parking_record pr left JOIN
+        pro_car_information pc
+          ON pc.`id` = pr.`car_id`
+        <trim prefix="where" prefixOverrides="and | or">
+            pr.record_situation = 0
+            <if test="carNumber != null and carNumber != ''">
+                 and pc.car_number like CONCAT ('%',#{carNumber},'%')
+            </if>
+        </trim>
+          order by pr.`entry_time` DESC
+    </select>
+
+    <select id="getParkingRecordById" resultMap="baseParkingRecord">
+		SELECT * FROM pro_parking_record
+		WHERE id = #{id}
+	</select>
+
+    <delete id="deleteParkingRecordById">
+        UPDATE pro_parking_record SET record_situation = 1 WHERE id = #{id}
+	</delete>
+
+    <update id="updateParkingRecord" parameterType="parkingRecord">
+		UPDATE pro_parking_record SET
+		car_id=#{carId},entry_time=#{entryTime},departure_time=#{departureTime}
+		WHERE id=#{id}
+	</update>
+
+    <select id="getParkingRecordCount" resultType="Int">
+        SELECT COUNT(1) FROM pro_parking_record r LEFT JOIN pro_car_information c ON r.car_id = c.id
+        <trim prefix="where" prefixOverrides="and | or">
+            r.record_situation = 0
+            <if test="carNumber != null and carNumber != ''">
+                 and car_number like CONCAT ('%',#{carNumber},'%')
+            </if>
+        </trim>
+    </select>
+
+    <insert id="insertParkingRecord" parameterType="parkingRecord">
+		INSERT INTO pro_parking_record
+		(car_id,entry_time,departure_time,price)
+		VALUES(#{carId},#{entryTime},#{departureTime},#{price})
+	</insert>
+
+    <select id="getByParkingRecord" resultMap="baseParkingRecord">
+        SELECT * FROM pro_parking_record
+        <trim prefix="where" prefixOverrides="and | or">
+            car_id=#{carId}
+            <if test="entryTime != null and entryTime != ''">
+                and entry_time=#{entryTime}
+            </if>
+        </trim>
+    </select>
+
+    <select id="getRecordByDeparture" resultMap="baseParkingRecord">
+        SELECT * FROM pro_parking_record WHERE departure_time LIKE CONCAT(#{departureTime},'%') and record_situation = 0
+    </select>
+
+    <select id="getAllPrice" resultMap="baseParkingRecord">
+        SELECT * FROM pro_parking_record WHERE record_situation = 0
+    </select>
+
+    <select id="getPriceByCarId" resultMap="baseParkingRecord">
+        SELECT * FROM pro_parking_record WHERE car_id = #{carId}
+    </select>
+</mapper>
