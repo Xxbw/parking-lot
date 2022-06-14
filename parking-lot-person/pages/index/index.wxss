@@ -1,0 +1,35 @@
+/**index.wxss**/
+.userinfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #aaa;
+}
+
+.userinfo-avatar {
+  overflow: hidden;
+  width: 128rpx;
+  height: 128rpx;
+  margin: 20rpx;
+  border-radius: 50%;
+}
+
+.usermotto {
+  margin-top: 200px;
+}
+.res-true{
+  height: 200rpx;
+  margin-top: 50rpx;
+}
+.res-false{
+  height: 200rpx;
+  margin-top: 50rpx;
+}
+.res-text{
+  color: black;
+  height: 100rpx;
+}
+.res-button button{
+  background-color: #09ba08;
+  color: aliceblue;
+}

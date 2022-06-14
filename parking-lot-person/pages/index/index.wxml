@@ -1,0 +1,15 @@
+<!--index.wxml-->
+<view class="container">
+  <view class="userinfo">
+      <block wx:if="{{result.flag === 'true'}}">
+          <view class="res-true"><image class="userinfo-avatar" src="/images/restrue.jpg" mode="cover"></image></view>
+          <view class="res-text"><text>支付成功！</text></view>
+          <view class="res-button"><button bindtap="back">返回</button></view>
+      </block>
+      <block wx:else>
+        <view class="res-false"><image class="userinfo-avatar" src="/images/resfalse.jpg" mode="cover"></image></view>
+        <view class="res-text"><text>支付失败！</text></view>
+        <view class="res-button"><button bindtap="back">返回</button></view>
+      </block>
+  </view>
+</view>

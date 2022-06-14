@@ -1,0 +1,48 @@
+<!--pages/home/home.wxml-->
+<view class="container">
+    <view class="top-img">
+        <image src="/images/welcome.jpg"></image>
+    </view>
+    <view class="center-text">
+        <view>
+            <block wx:if="{{carInfor != 0}}">
+                <view class="user-infor">
+                    <view class="userinfo">
+                        <block wx:if="{{canIUseOpenData}}">
+                        <view class="userinfo-avatar">
+                            <open-data type="userAvatarUrl"></open-data>
+                        </view>
+                        <open-data type="userNickName"></open-data>
+                        </block>
+                        <block wx:elif="{{!hasUserInfo}}">
+                        <button wx:if="{{canIUseGetUserProfile}}" bindtap="getUserProfile"> 获取头像昵称 </button>
+                        <button wx:elif="{{canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
+                        <view wx:else> 请使用1.4.4及以上版本基础库 </view>
+                        </block>
+                        <block wx:else>
+                        <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+                        <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+                        </block>
+                    </view>
+                </view>
+                <view class="car-Infor">
+                    <view>车牌号码：<text>{{carInfor.carInfor.carNumber}}</text></view>
+                    <view>驶入时间：<text>{{carInfor.entryTime}}</text></view>
+                    <view>缴费金额：<text>{{priceMoney}}</text></view>
+                    <view><button data-articleId="{{vehicleId}}" data-price="{{priceMoney}}" style="color: green;background-color: greenyellow;" bindtap="pay" >确认支付</button></view>
+                </view>
+            </block>
+            <block wx:elif="{{carInfor}}">
+                <view class="error-car">
+                    <view style="margin-bottom: 30rpx;"><text>获取车辆信息失败</text></view>
+                    <view><button bindtap="getInfor">刷新</button></view>
+                </view>
+            </block>
+        </view>
+    </view>
+    <view class="bottom-text">
+        <text>友情提醒：</text>
+        <text>\n</text>
+        <text class="text-infor">停车缴费后，请在<text style="color: #cc3b3b;"> 15分钟 </text>内离开停车场，如超出时间需要再支付新产生的停车费用，联系电话：<text style="color: #cc3b3b;">12312312313</text></text>
+    </view>
+</view>

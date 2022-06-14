@@ -1,0 +1,61 @@
+/* pages/home/home.wxss */
+image{
+    height: 400rpx;
+    width: 100%;
+    float: left;
+}
+.center-text{
+    height: 60%;
+    width: 90%;
+    text-align: center;
+    margin: 0 5%;
+    background-color: #ffffff;
+    float: left;
+    margin-top: -100rpx;
+    margin-bottom: 50rpx;
+    border-radius: 3%;
+    max-height: 800rpx;
+    min-height: 600rpx;
+}
+.bottom-text{
+    padding: 0 8%;
+    background-color: #efeff4;
+    padding-bottom: 50rpx;
+}
+.text-infor{
+    font-size: 24rpx;
+    color: #aaaaaa;
+}
+.error-car{
+    height: 100%;
+    margin-top: 40%;
+}
+.car-Infor{
+    height: 100%;
+}
+.userinfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #aaa;
+  }
+  
+.userinfo-avatar {
+    overflow: hidden;
+    width: 128rpx;
+    height: 128rpx;
+    margin: 20rpx;
+    border-radius: 50%;
+}
+.user-infor{
+    height: 270rpx;
+    margin-top: 50rpx;
+}
+.car-Infor view{
+    margin-bottom: 40rpx;
+    color: black;
+}
+.car-Infor view text{
+    margin-bottom: 40rpx;
+    color: red;
+}
